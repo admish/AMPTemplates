@@ -19,3 +19,12 @@ The Gatekeeper Discord bot ([leonbreidenbach-pc/GatekeeperV3](https://github.com
 In the ADS panel: **Configuration → Instance Deployment → Configuration Repositories → Add** → `admish/AMPTemplates`, then **Fetch Latest**. AMP pulls this repo alongside the official CubeCoders/AMPTemplates on every fetch — no manual re-cloning, no clobbering.
 
 Files must stay flat in the repo root (same layout as the official AMPTemplates repo).
+
+## ⚠️ manifest.json is load-bearing
+
+ADS **silently skips** any configuration repository whose root lacks a `manifest.json`
+(verified against decompiled ADSModule 2.8, `BuildAppsCache`): no log entry, no error —
+the templates just never appear in Create Instance. If templates from this repo ever
+vanish from the catalog, check that this file still exists before debugging anything else.
+Schema (all fields required): `id` (any GUID), `authors`, `origin`, `url`, `imagefile`,
+`prefix`, `repotype` — where `repotype` must be `"AppTemplates"` for kvp template repos.
